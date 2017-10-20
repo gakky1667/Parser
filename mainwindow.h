@@ -5,6 +5,12 @@
 #include <QGroupBox>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include "create_file.h"
+
+#define MEASURER 1
+#define ANALYZER 2
+#define SCHEDULER 3
+#define TRACER 4
 
 namespace Ui {
 class MainWindow;
@@ -21,9 +27,17 @@ public:
     QGroupBox *Mode;
     QGroupBox *NodeListViewer;
     QGroupBox *Previewer;
+    int mode_flag;
 
 public slots:
     void highlightChecked(QListWidgetItem *item);
+    void create_file();
+    void refresch_node_list();
+    void measurer_mode();
+    void analyzer_mode();
+    void scheduler_mode();
+    void tracer_mode();
+
 private:
     Ui::MainWindow *ui;
 
@@ -34,6 +48,7 @@ private:
     QGroupBox *createNodeListViewer();
     QGroupBox *createPreviewer();
     void createListWidget();
+    ROSCH::Parser parser;
 };
 
 #endif // MAINWINDOW_H

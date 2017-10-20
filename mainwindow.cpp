@@ -6,6 +6,8 @@
 #include <QListWidget>
 #include <QLabel>
 #include <QTextBlock>
+#include "create_file.h"
+#include "type.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowTitle(tr("Parser"));
+    mode_flag = 0;
 
     Mode = createMode();
     NodeListViewer = createNodeListViewer();
@@ -29,9 +32,17 @@ MainWindow::MainWindow(QWidget *parent) :
     /* left window in buttom window*/
     QVBoxLayout *left_layout = new QVBoxLayout;
     QPushButton *getNodeList = new QPushButton("Refresh");
+    QPushButton *okButton = new QPushButton("ok");
     left_layout->addWidget(NodeListViewer);
     left_layout->addWidget(getNodeList);
+    left_layout->addWidget(okButton);
     buttomLayout->addLayout(left_layout);
+
+    QObject::connect(getNodeList, SIGNAL(clicked()),
+                     this, SLOT(refresch_node_list()));
+    QObject::connect(okButton, SIGNAL(clicked()),
+                     this, SLOT(create_file()));
+
 
     /* right window in buttom window */
     buttomLayout->addWidget(Previewer);
@@ -79,6 +90,14 @@ QGroupBox *MainWindow::createMode(){
     toplayout->addLayout(modeLayout);
     groupBox->setLayout(toplayout);
 
+    QObject::connect(measurer, SIGNAL(clicked()),
+                     this, SLOT(measurer_mode()));
+    QObject::connect(analyzer, SIGNAL(clicked()),
+                     this, SLOT(analyzer_mode()));
+    QObject::connect(scheduler, SIGNAL(clicked()),
+                     this, SLOT(scheduler_mode()));
+    QObject::connect(tracer, SIGNAL(clicked()),
+                     this, SLOT(tracer_mode()));
 
     return groupBox;
 }
@@ -128,4 +147,25 @@ void MainWindow::highlightChecked(QListWidgetItem *item){
         item->setBackgroundColor(QColor("#ffffb2"));
     else
         item->setBackgroundColor(QColor("#ffffff"));
+}
+
+void MainWindow::refresch_node_list(){
+
+}
+
+void MainWindow::create_file(){
+    parser.create_file();
+}
+
+void MainWindow::measurer_mode(){
+    mode_flag = MEASURER;
+}
+void MainWindow::analyzer_mode(){
+    mode_flag = ANALYZER;
+}
+void MainWindow::scheduler_mode(){
+    mode_flag = SCHEDULER;
+}
+void MainWindow::tracer_mode(){
+    mode_flag = TRACER;
 }
